@@ -271,8 +271,7 @@ public class HashtagView extends LinearLayout {
     }
 
     /**
-     * @param transformer Implementation of {@link com.greenfrvr.hashtagview.HashtagView.DataTransform} or
-     *                    {@link com.greenfrvr.hashtagview.HashtagView.DataStateTransform}
+     * @param transformer Implementation of {@link com.greenfrvr.hashtagview.HashtagView.DataTransform}
      *                    interface. Can be used for building label from several custom data model
      *                    fields or to prepare {@link android.text.Spannable} label representation.
      * @param <T>         Custom data model
@@ -282,13 +281,25 @@ public class HashtagView extends LinearLayout {
     }
 
     /**
+     * @param selector Implementation of {@link com.greenfrvr.hashtagview.HashtagView.DataSelector}
+     *                 interface. Can be used to preselect some items.
+     * @param <T>      Custom data model
+     */
+    public <T> void setSelector(@NonNull DataSelector<T> selector) {
+        this.selector = selector;
+    }
+
+    /**
      * @return List of selected items. Consists of objects corresponding to custom data model defined by setData() method
      */
-    public List<Object> getSelectedItems() {
-        List<Object> selected = new ArrayList<>();
+    public <T> List<T> getSelectedItems() {
+        List<T> selected = new ArrayList<>();
+        if (viewMap == null || viewMap.isEmpty())
+            return selected;
+
         for (ItemData item : viewMap.values()) {
             if (item.isSelected)
-                selected.add(item.data);
+                selected.add((T) item.data);
         }
         return selected;
     }
